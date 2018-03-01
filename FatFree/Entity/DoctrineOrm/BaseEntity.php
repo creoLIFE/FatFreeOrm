@@ -8,7 +8,7 @@ use FatFree\Entity\MapperTrait;
 /**
  * @ORM\MappedSuperclass()
  */
-abstract class BaseEntity extends ModelMethodsHelper
+class BaseEntity extends ModelMethodsHelper
 {
 	/**
 	 * Default ID filed name from IdentifierTriat

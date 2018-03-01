@@ -14,38 +14,44 @@ abstract class BaseService extends DoctrineOrm
     /**
      * Method will get results from DB by given Entity definition
      * @param BaseEntity $entity
-     * @return BaseEntity|null
+     * @return BaseEntity
      */
-    public function get(BaseEntity $entity): ?BaseEntity
+    public function get(BaseEntity $entity): BaseEntity
     {
-        return $this->entityManager
+        $result = $this->entityManager
             ->getRepository($entity->getClassName())
             ->find($entity);
+
+        return $result ? $result : $entity;
     }
 
     /**
      * Method will get all results from DB by given Entity definition
      * @param BaseEntity $entity
-     * @return BaseEntity|null
+     * @return array
      */
-    public function getAll(BaseEntity $entity): ?BaseEntity
+    public function getAll(BaseEntity $entity): array
     {
-        return $this->entityManager
+        $result = $this->entityManager
             ->getRepository($entity->getClassName())
             ->findAll($entity);
+
+        return $result ? $result : [];
     }
 
     /**
      * Method will get entity by given keys
      * @param BaseEntity $entity
      * @param array $keys
-     * @return BaseEntity|null
+     * @return BaseEntity
      */
-    public function getOneByKeys(BaseEntity $entity, array $keys): ?BaseEntity
+    public function getOneByKeys(BaseEntity $entity, array $keys): BaseEntity
     {
-        return $this->entityManager
+        $result = $this->entityManager
             ->getRepository($entity->getClassName())
             ->findOneByKeys($entity, $keys);
+
+        return $result ? $result : $entity;
     }
 
     /**
@@ -56,9 +62,11 @@ abstract class BaseService extends DoctrineOrm
      */
     public function getAllByKeys(BaseEntity $entity, array $keys): array
     {
-        return $this->entityManager
+        $result = $this->entityManager
             ->getRepository($entity->getClassName())
             ->findByKeys($entity, $keys);
+
+        return $result ? $result : [];
     }
 
     /**
@@ -66,10 +74,9 @@ abstract class BaseService extends DoctrineOrm
      * @param BaseEntity $entity
      * @param array $values
      * @param boolean $flush
-     * @return BaseEntity|void
-     * @throws ServiceException
+     * @return BaseEntity
      */
-    public function insert(BaseEntity $entity, array $values = [], $flush = true)
+    public function insert(BaseEntity $entity, array $values = [], $flush = true): BaseEntity
     {
         if (!empty($values)) {
             //Map data to entity
@@ -98,10 +105,9 @@ abstract class BaseService extends DoctrineOrm
      * @param BaseEntity $entity
      * @param array $values
      * @param boolean $flush
-     * @return BaseEntity|void
-     * @throws ServiceException
+     * @return BaseEntity
      */
-    public function insertIfNotExist(BaseEntity $entity, array $values = [], $flush = true)
+    public function insertIfNotExist(BaseEntity $entity, array $values = [], $flush = true): BaseEntity
     {
         if (!empty($values)) {
             //Map data to entity
@@ -133,11 +139,10 @@ abstract class BaseService extends DoctrineOrm
      * @param BaseEntity $entity
      * @param array $values
      * @param array $keys
-     * @param boolean $flush
-     * @return BaseEntity|void
-     * @throws ServiceException
+     * @param bool $flush
+     * @return BaseEntity
      */
-    public function insertIfNotExistByKeys(BaseEntity $entity, array $values = [], array $keys, $flush = true)
+    public function insertIfNotExistByKeys(BaseEntity $entity, array $values = [], array $keys, $flush = true): BaseEntity
     {
         if (!empty($values)) {
             //Map data to entity
@@ -175,10 +180,9 @@ abstract class BaseService extends DoctrineOrm
      * @param BaseEntity $entity
      * @param array $values
      * @param boolean $flush
-     * @return BaseEntity|void
-     * @throws ServiceException
+     * @return BaseEntity
      */
-    public function mergeIfNotExist(BaseEntity $entity, array $values = [], $flush = true)
+    public function mergeIfNotExist(BaseEntity $entity, array $values = [], $flush = true): BaseEntity
     {
         if (!empty($values)) {
             //Map data to entity
@@ -211,10 +215,9 @@ abstract class BaseService extends DoctrineOrm
      * @param array $values
      * @param array $keys
      * @param boolean $flush
-     * @return BaseEntity|void
-     * @throws ServiceException
+     * @return BaseEntity
      */
-    public function mergeIfNotExistByKeys(BaseEntity $entity, array $values = [], array $keys, $flush = true)
+    public function mergeIfNotExistByKeys(BaseEntity $entity, array $values = [], array $keys, $flush = true): BaseEntity
     {
         if (!empty($values)) {
             //Map data to entity
@@ -252,7 +255,7 @@ abstract class BaseService extends DoctrineOrm
      * @param BaseEntity $entity
      * @return bool
      */
-    public function exist(BaseEntity $entity)
+    public function exist(BaseEntity $entity): bool
     {
         return $this->entityManager
             ->getRepository($entity->getClassName())
@@ -263,16 +266,15 @@ abstract class BaseService extends DoctrineOrm
      * Method will check if entity exists in DB by given keys
      * @param BaseEntity $entity
      * @param array $keys
-     * @return BaseEntity|void
-     * @throws ServiceException
+     * @return BaseEntity
      */
-    public function existByKeys(BaseEntity $entity, array $keys)
+    public function existByKeys(BaseEntity $entity, array $keys): BaseEntity
     {
         $foundEntity = $this->entityManager
             ->getRepository($entity->getClassName())
             ->findOneByKeys($entity, $keys);
 
-        return $foundEntity;
+        return $foundEntity ? $foundEntity : $entity;
     }
 
 
@@ -280,9 +282,9 @@ abstract class BaseService extends DoctrineOrm
      * Method will delete entity to DB
      * @param BaseEntity $entity
      * @param boolean $flush
-     * @return integer|false
+     * @return BaseEntity
      */
-    public function delete(BaseEntity $entity, $flush = true)
+    public function delete(BaseEntity $entity, $flush = true): BaseEntity
     {
         $this->entityManager
             ->remove($entity);
@@ -300,7 +302,7 @@ abstract class BaseService extends DoctrineOrm
      * @param boolean $flush
      * @return BaseEntity
      */
-    public function deleteSafe(BaseEntity $entity, $flush = true)
+    public function deleteSafe(BaseEntity $entity, $flush = true): BaseEntity
     {
         $entity->setSafedelete(1);
         $entity->setDeleted(new \DateTime());
@@ -320,7 +322,7 @@ abstract class BaseService extends DoctrineOrm
      * @param boolean $flush
      * @return BaseEntity
      */
-    public function update(BaseEntity $entity, array $values = [], $flush = true)
+    public function update(BaseEntity $entity, array $values = [], $flush = true): BaseEntity
     {
         if (!empty($values)) {
             //Map data to entity
@@ -338,13 +340,13 @@ abstract class BaseService extends DoctrineOrm
     }
 
     /**
-     * Method will check if entity exists in DB by Its ID
+     * Method will count number of entities by ID
      * @param BaseEntity $entity
-     * @return bool
+     * @return int
      */
-    public function count(BaseEntity $entity)
+    public function count(BaseEntity $entity): int
     {
-        return $this->entityManager
+        return (int)$this->entityManager
             ->getRepository($entity->getClassName())
             ->createQueryBuilder('a')
             ->select('COUNT(a.id)')
