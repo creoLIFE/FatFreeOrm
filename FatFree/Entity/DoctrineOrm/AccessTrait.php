@@ -8,12 +8,12 @@ trait AccessTrait
 {
     /**
      * @var boolean
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default" : 1})
      */
     protected $_enabled = 1;
 
     /**
-     * @return bool
+     * @return 	use AccessTrait;bool
      */
     public function isEnabled()
     {
