@@ -23,19 +23,16 @@
         {
             "type": "vcs",
             "url": "https://github.com/creoLIFE/FatFreeCommon"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/thephpleague/csv.git"
         }
     ],
     "require-dev": {
-        "phpunit/phpunit": "4.8.*"
+        "phpunit/phpunit": "6.4.*"
     },
     "require": {
         "php": ">=5.4.0",
         "bcosca/fatfree": "@stable",
-        "creoLIFE/FatFreeCommon": "@stable",
-        "doctrine/orm": "2.5.9"
+        "creoLIFE/FatFreeCommon": "2.0.3",
+        "doctrine/instantiator": "~1.1",
+        "doctrine/orm": "2.6.2"
     }
 }
