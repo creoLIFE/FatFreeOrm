@@ -38,7 +38,11 @@ class DoctrineOrm
                 (array)$ormConfig->getEntityPath()
             )
         );
-        $config->setMetadataCacheImpl($ormConfig->getCache());
+
+        // Set cache implementation
+        if (!empty($ormConfig->getCache())) {
+            $config->setMetadataCache($ormConfig->getCache());
+        }
 
         $config->setProxyDir($ormConfig->getProxyDir());
         $config->setProxyNamespace($ormConfig->getProxyNamespace());
